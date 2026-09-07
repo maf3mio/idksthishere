@@ -6,7 +6,7 @@
   <title>Happy Birthday! 🎉</title>
   <link rel="icon" type="image/x-icon" href="./fav.png">
   <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
-  <!-- <style>
+  <style>
     :root {
       --yellow: #FFE134;
       --pink: #FF3CAC;
@@ -29,7 +29,6 @@
       cursor: default;
     }
 
-    /* ── CONFETTI CANVAS ── */
     #confetti-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -38,7 +37,6 @@
       z-index: 0;
     }
 
-    /* ── HERO SECTION ── */
     .hero {
       position: relative;
       z-index: 1;
@@ -101,7 +99,6 @@
       letter-spacing: 2px;
     }
 
-    /* ── MEME GRID ── */
     .meme-section {
       position: relative;
       z-index: 1;
@@ -154,7 +151,6 @@
       letter-spacing: 1px;
     }
 
-    /* ── LIGHTBOX ── */
     .lightbox {
       display: none;
       position: fixed;
@@ -184,7 +180,6 @@
       line-height: 1;
     }
 
-    /* ── FOOTER ── */
     footer {
       position: relative;
       z-index: 1;
@@ -195,7 +190,6 @@
       font-size: 13px;
     }
 
-    /* ── ANIMATIONS ── */
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.7); }
       to   { opacity: 1; transform: scale(1); }
@@ -264,30 +258,21 @@
 </footer>
 
 <script>
-  /* ═══════════════════════════════════════════════
-     CONFIGURATION — change these to match your setup
-  ═══════════════════════════════════════════════ */
-  const TOTAL_MEMES   = 450;   // highest filename number you have
-  const SHOW_COUNT    = 20;    // how many to show per load
-  const MEME_FOLDER   = './'; // folder where your images live (relative to this HTML file)
-  const FILE_EXT      = 'jpeg'; // file extension of your memes
 
-  /* ═══════════════════════════════════════════════
-     RANDOM PICKER — picks SHOW_COUNT unique numbers
-     from 1 to TOTAL_MEMES
-  ═══════════════════════════════════════════════ */
+  const TOTAL_MEMES   = 450;   
+  const SHOW_COUNT    = 20;    
+  const MEME_FOLDER   = './'; 
+  const FILE_EXT      = 'jpeg'; 
+
   function pickRandomUnique(total, count) {
     const pool = Array.from({ length: total }, (_, i) => i + 1);
-    for (let i = pool.length - 1; i > 0; i--) {         // Fisher-Yates shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     return pool.slice(0, count);
   }
 
-  /* ═══════════════════════════════════════════════
-     BUILD GRID
-  ═══════════════════════════════════════════════ */
   function buildGrid() {
     const chosen = pickRandomUnique(TOTAL_MEMES, SHOW_COUNT);
     const grid   = document.getElementById('meme-grid');
@@ -313,14 +298,10 @@
       card.appendChild(label);
       grid.appendChild(card);
 
-      // open lightbox on click
       card.addEventListener('click', () => openLightbox(img.src));
     });
   }
 
-  /* ═══════════════════════════════════════════════
-     LIGHTBOX
-  ═══════════════════════════════════════════════ */
   function openLightbox(src) {
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
@@ -333,9 +314,6 @@
   document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  /* ═══════════════════════════════════════════════
-     CONFETTI
-  ═══════════════════════════════════════════════ */
   (function confetti() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx    = canvas.getContext('2d');
@@ -389,9 +367,7 @@
     draw();
   })();
 
-  /* ── init ── */
   buildGrid();
 </script>
--->
 </body>
 </html>
