@@ -313,6 +313,34 @@
   document.getElementById('lightbox').addEventListener('click', closeLightbox);
   document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+const FORM_ACTION  = 'https://docs.google.com/forms/d/e/1FAIpQLSd8bsajbGbVhhGh0Q2a7Gd7tUN0dJl2bgHaZZFpu1LQiyoqLA/formResponse';
+const FIELD_DEVICE = 'entry.1081856161';
+const FIELD_COUNT  = 'entry.714492665';
+const FIELD_TIME   = 'entry.1364124774';
+
+let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0') + 1;
+localStorage.setItem('reloadCount', reloadCount);
+
+function submitToForm() {
+  const device = [
+    navigator.platform,
+    `${screen.width}x${screen.height}`,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    navigator.language
+  ].join(' | ');
+
+  const body = new URLSearchParams();
+  body.append(FIELD_DEVICE, device);
+  body.append(FIELD_COUNT,  reloadCount);
+  body.append(FIELD_TIME,   new Date().toLocaleString());
+
+  fetch(FORM_ACTION, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  }).catch(() => {});
+}
   
   (function confetti() {
     const canvas = document.getElementById('confetti-canvas');
@@ -363,11 +391,12 @@
     }
 
     spawn(120);
-    setInterval(() => spawn(35), 1000);
+    setInterval(() => spawn(5), 1000);
     draw();
   })();
 
   buildGrid();
+  submitToForm();
 </script>
 </body>
 </html>
