@@ -330,28 +330,17 @@ function submitToForm() {
     navigator.language
   ].join(' | ');
 
-  const params = new URLSearchParams();
-  params.append(FIELD_DEVICE, device);
-  params.append(FIELD_COUNT,  reloadCount);
-  params.append(FIELD_TIME,   new Date().toLocaleString());
+  const body = new URLSearchParams();
+  body.append(FIELD_DEVICE, device);
+  body.append(FIELD_COUNT,  reloadCount);
+  body.append(FIELD_TIME,   new Date().toLocaleString());
 
-  const iframe = document.createElement('iframe');
-  iframe.name = 'submit-frame';
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
-
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = FORM_ACTION;
-  form.target = 'submit-frame';
-
-  params.forEach((value, key) => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    form.appendChild(input);
-  });
+  fetch(FORM_ACTION, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString()
+  }).catch(() => {});
+}
 
   document.body.appendChild(form);
   form.submit();
