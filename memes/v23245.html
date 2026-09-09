@@ -131,6 +131,26 @@
       box-shadow: 0 12px 40px rgba(255,225,52,0.2);
     }
 
+    /* Стиль для мемів, які користувач уже переглядав */
+  .meme-card.opened {
+    opacity: 0.55;
+    filter: grayscale(0.5);
+    border-color: #444 !important;
+  }
+
+  .meme-card.opened::after {
+    content: "👁️";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
     .meme-card:nth-child(2n):hover  { transform: translateY(-6px) scale(1.03) rotate(1deg); }
     .meme-card:nth-child(3n):hover  { border-color: var(--pink); box-shadow: 0 12px 40px rgba(255,60,172,0.2); }
     .meme-card:nth-child(4n):hover  { border-color: var(--blue); box-shadow: 0 12px 40px rgba(43,210,255,0.2); }
@@ -263,6 +283,9 @@
   const MEME_FOLDER   = './';  
   const FILE_EXT      = 'jpeg'; 
 
+  // Зберігання та зчитування переглянутих мемів
+  let openedMemes = JSON.parse(localStorage.getItem('openedMemes') || '[]');
+
   function pickRandomUnique(total, count) {
     const pool = Array.from({ length: total }, (_, i) => i + 1);
     for (let i = pool.length - 1; i > 0; i--) {
@@ -283,6 +306,11 @@
       card.className = 'meme-card';
       card.style.animationDelay = `${idx * 60}ms`;
 
+      // Позначаємо мем, якщо він вже переглядався
+      if (openedMemes.includes(num)) {
+        card.classList.add('opened');
+      }
+
       const img = document.createElement('img');
       img.src = src;
       img.onerror = () => { img.src = `${MEME_FOLDER}${num}.jpeg`; };
@@ -297,18 +325,29 @@
       card.appendChild(label);
       grid.appendChild(card);
 
-      card.addEventListener('click', () => openLightbox(img.src));
+      card.addEventListener('click', () => openLightbox(img.src, num, card));
     });
   }
 
-  function openLightbox(src) {
+  function openLightbox(src, num, cardElement) {
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
+
+    // Записуємо переглянутий мем у localStorage
+    if (num && !openedMemes.includes(num)) {
+      openedMemes.push(num);
+      localStorage.setItem('openedMemes', JSON.stringify(openedMemes));
+      if (cardElement) {
+        cardElement.classList.add('opened');
+      }
+    }
   }
+
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.getElementById('lightbox-img').src = '';
   }
+
   document.getElementById('lightbox').addEventListener('click', closeLightbox);
   document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
