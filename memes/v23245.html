@@ -79,6 +79,7 @@
       max-width: 560px;
       margin: 0 auto 16px;
       animation: slideDown 0.7s cubic-bezier(.175,.885,.32,1.4) 0.2s both;
+      white-space: pre-line; /* Дозволяє працювати переносам рядків */
     }
 
     .hero-note {
@@ -132,24 +133,24 @@
     }
 
     /* Стиль для мемів, які користувач уже переглядав */
-  .meme-card.opened {
-    opacity: 0.55;
-    filter: grayscale(0.5);
-    border-color: #444 !important;
-  }
+    .meme-card.opened {
+      opacity: 0.55;
+      filter: grayscale(0.5);
+      border-color: #444 !important;
+    }
 
-  .meme-card.opened::after {
-    content: "це ж було вже";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.75);
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 20px;
-  }
+    .meme-card.opened::after {
+      content: "це ж було вже";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
 
     .meme-card:nth-child(2n):hover  { transform: translateY(-6px) scale(1.03) rotate(1deg); }
     .meme-card:nth-child(3n):hover  { border-color: var(--pink); box-shadow: 0 12px 40px rgba(255,60,172,0.2); }
@@ -243,30 +244,7 @@
     <br>
     Хз шо тобі тут писати. Вітаю з 18-річчям? Як мінімум ти не спилася до цього моменту, бо тоді б цього не було, напевно... У будь-якому разі зичу щастя, здоров'я, грошей, не дебілів (хоча кого обманювати, колись вони не були?) на особистому,
 ну і шось там ще, щас я подумаю і вернусь, жді мєня
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     Ти ще тут? Продовжимо на юридичному фронті: <br>
     <b>Тепер ти можеш:</b><br>
     &nbsp;·&nbsp; бути сурогатною матір'ю, але перед цим тобі б вже дитинку народити треба було...
@@ -324,11 +302,10 @@
 
 <script>
   const TOTAL_MEMES   = 451;    
-  const SHOW_COUNT    = 20;     
+  const SHOW_COUNT    = 20;    
   const MEME_FOLDER   = './';  
   const FILE_EXT      = 'jpeg'; 
 
-  // Зберігання та зчитування переглянутих мемів
   let openedMemes = JSON.parse(localStorage.getItem('openedMemes') || '[]');
 
   function pickRandomUnique(total, count) {
@@ -351,7 +328,6 @@
       card.className = 'meme-card';
       card.style.animationDelay = `${idx * 60}ms`;
 
-      // Позначаємо мем, якщо він вже переглядався
       if (openedMemes.includes(num)) {
         card.classList.add('opened');
       }
@@ -378,7 +354,6 @@
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
 
-    // Записуємо переглянутий мем у localStorage
     if (num && !openedMemes.includes(num)) {
       openedMemes.push(num);
       localStorage.setItem('openedMemes', JSON.stringify(openedMemes));
@@ -474,9 +449,11 @@
       requestAnimationFrame(draw);
     }
 
-    spawn(120);
-    setInterval(() => spawn(5), 5000);
-    draw();
+    (function() {
+      spawn(120);
+      setInterval(() => spawn(5), 5000);
+      draw();
+    })();
   })();
 
   buildGrid();
