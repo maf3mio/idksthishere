@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Happy birthday</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="icon" type="image/x-icon" href="./fav.png">
+<link rel="fav" type="image/x-type" href="./fav.png">
 <style>
   :root {
     --bg: #000018; --blue: #3a9bff; --purple: #b21fd6; --pink: #ff2a7a; --neon: #ff5cf0; --frame: #ffb8f7;
@@ -31,7 +31,9 @@
   @keyframes f2 { 0% { opacity: 0; } 50% { opacity: 1; } }
 
   /* ---------- лендінг ---------- */
-  .page { position: relative; max-width: 460px; min-height: 100%; margin: 0 auto; background: var(--bg); overflow: hidden; }
+  .page { position: relative; max-width: 460px; min-height: 100%; margin: 0 auto; overflow: hidden;
+    background-color: var(--bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h32v2h-32z M0 8h32v2h-32z M0 16h32v2h-32z M0 24h32v2h-32z M0 2h2v6h-2z M16 2h2v6h-2z M8 10h2v6h-2z M24 10h2v6h-2z M0 18h2v6h-2z M16 18h2v6h-2z M8 26h2v6h-2z M24 26h2v6h-2z' fill='%233a6bff' fill-opacity='.08'/%3E%3C/svg%3E"); image-rendering: pixelated; }
   .decor { position: absolute; top: 0; left: 0; right: 0; height: 260px; pointer-events: none; z-index: 0; }
   .decor .sp { position: absolute; line-height: 0; }
 
@@ -133,7 +135,6 @@
   <div class="hearts" id="hearts"></div>
 
   <img class="divider" src="./separator.png" alt="">
-
   <div class="arena">
     <div class="layer" id="bg"></div>
     <div class="menu">
@@ -217,7 +218,7 @@ var HEART_O = [".XX.XX.", "X..X..X", "X.....X", ".X...X.", "..X.X..", "...X..."]
 
 var IMG_ROCKET = "./rocket.png";
 var IMG_BUBBLE = "./wat_bubble.png";
-  
+
 function G(col, s) { return sprite(GHOST, { X: col, W: "#fff", B: "#2230ff" }, s); }
 function BUBBLE(s) { return '<img src="' + IMG_BUBBLE + '" alt="" style="display:block;width:' + (s * 10) + 'px;image-rendering:pixelated">'; }
 function PAC(px) {
@@ -233,12 +234,12 @@ var pacGhost = '<div style="position:relative;width:118px;height:70px">' +
   '<div style="position:absolute;left:0;top:0;z-index:2">' + PAC(5) + '</div></div>';
 
 var decor = [
-  { h: G("#ff2a7a", 4), l: "3%",  t: 38,  a: "hop",   d: "0s" },
-  { h: pacGhost,        l: "14%", t: 22,  a: "hop",   d: ".4s" },
-  { h: sprite(INVADER, { X: "#7dff1a" }, 3), l: "56%", t: 36, a: "hop", d: ".2s" },
+  { h: G("#ff2a7a", 4), l: "1%",  t: 24,  a: "hop",   d: "0s" },
+  { h: pacGhost,        l: "17%", t: 24,  a: "hop",   d: ".4s" },
+  { h: sprite(INVADER, { X: "#7dff1a" }, 3), l: "62%", t: 30, a: "hop", d: ".2s" },
   { h: '<img src="' + IMG_ROCKET + '" alt="" style="display:block;width:40px;image-rendering:pixelated">', l: "78%", t: 12, a: "hop", d: ".7s" },
-  { h: G("#ff1fe0", 3),  l: "1%",  t: 92,  a: "hop",   d: "1.2s" },
-  { h: G("#ff1fe0", 3),  l: "44%", t: 96,  a: "hop",   d: ".6s" },
+  { h: G("#ff1fe0", 3),  l: "1%",  t: 68,  a: "hop",   d: "1.2s" },
+  { h: G("#ff1fe0", 3),  l: "50%", t: 62,  a: "hop",   d: ".6s" },
   { h: BUBBLE(3), l: "88%", t: 4,   a: "drift", d: "0s" },
   { h: BUBBLE(3), l: "94%", t: 34,  a: "drift", d: "1s" },
   { h: BUBBLE(3), l: "92%", t: 66,  a: "drift", d: "2s" },
