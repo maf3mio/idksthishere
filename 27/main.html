@@ -204,7 +204,8 @@
    ========================================================= */
 var VIDEOS = [
   "video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4",
-  "video6.mp4", "video7.mp4", "video8.mp4", "video9.mp4", "video10.mp4"
+  "video6.mp4", "video7.mp4", "video8.mp4", "video9.mp4", "video10.mp4",
+  "video11.mp4", "video12.mp4", "video13.mp4", "video14.mp4"
 ];
 
 /* ---------- піксель-арт ---------- */
@@ -364,6 +365,7 @@ var shown = 0;        /* індекс останнього відкритого 
 var current = -1;
 var timer = null;
 var NEED_SECONDS = 30;
+var TWICE_UNDER = 15;   /* відео коротше цього грає двічі */
 
 function shuffleVideos() {
   order = VIDEOS.slice();
@@ -437,8 +439,14 @@ function updateHint(idx) {
     return;
   }
   var v = slides[idx].getElementsByTagName("video")[0];
-  var need = Math.min(v.duration || NEED_SECONDS, NEED_SECONDS);
-  var left = Math.ceil(need - v.currentTime);
+  var dur = v.duration || NEED_SECONDS;
+  var need = Math.min(dur, NEED_SECONDS);
+  var elapsed = v.currentTime;
+  if (dur < TWICE_UNDER) {
+    need = dur * 2;
+    elapsed = (v.plays || 0) * dur + v.currentTime;
+    }
+  var left = Math.ceil(need - elapsed);
   if (left < 1) { left = 1; }
   hintEl.textContent = "ДИВИСЬ ЩЕ " + left + " С";
   hintEl.className = "hint show";
@@ -453,13 +461,16 @@ function wireSlide(slide, idx) {
   v.addEventListener("timeupdate", function () {
     if (idx !== current || done[idx]) { return; }
     var need = Math.min(v.duration || NEED_SECONDS, NEED_SECONDS);
-    if (v.currentTime >= need - 0.05) { markDone(idx); }
+    if (need < TWICE_UNDER) { updateHint(idx); }
+    else if (v.currentTime >= need - 0.05) { markDone(idx); }
     else { updateHint(idx); }
   });
   /* без loop: коротке відео зараховується, коли дограло до кінця, і далі крутиться по колу */
   v.addEventListener("ended", function () {
     if (idx !== current) { return; }
-    markDone(idx);
+    v.plays = (v.plays || 0) + 1;
+    var dur = v.duration || NEED_SECONDS;
+    if (dur >= TWICE_UNDER || v.plays >= 2) { markDone(idx); }
     v.currentTime = 0;
     playSlide(slide);
   });
